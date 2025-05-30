@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produtos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8f0ff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .preview-image {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin-right: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            font-size: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .products-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .product-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .product-info p {
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .no-products {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Cadastro de Produtos</h1>
+            <p>Gerencie seus produtos cosméticos de forma simples e eficiente</p>
+        </div>
+
+        <div class="content">
+            <div class="form-section">
+                <h2>Cadastrar Produto</h2>
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="nome">Nome do Produto *</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="marca">Marca *</label>
+                        <input type="text" id="marca" name="marca" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoria">Categoria *</label>
+                        <select id="categoria" name="categoria" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="maquiagem">Maquiagem</option>
+                            <option value="skincare">Skincare</option>
+                            <option value="cabelo">Cuidados com Cabelo</option>
+                            <option value="corpo">Cuidados Corporais</option>
+                            <option value="perfumaria">Perfumaria</option>
+                            <option value="masculino">Masculino</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="preco">Preço (R$) *</label>
+                        <input type="number" id="preco" name="preco" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <textarea id="descricao" name="descricao" placeholder="Descreva as características do produto..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estoque">Quantidade em Estoque</label>
+                        <input type="number" id="estoque" name="estoque" min="0" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Foto do Produto</label>
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">📷</div>
+                            <p>Clique aqui ou arraste uma imagem</p>
+                            <p style="font-size: 12px; color: #666;">JPG, PNG, GIF até 5MB</p>
+                            <input type="file" id="foto" name="foto" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="imagePreview"></div>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Cadastrar Produto</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="products-section">
+                <h2>Produtos Cadastrados</h2>
+                <div id="productsList" class="products-grid">
+                    <div class="no-products">
+                        Nenhum produto cadastrado ainda. Comece adicionando seu primeiro produto!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let products = [];
+        let editingId = null;
+
+        // Elementos do DOM
+        const form = document.getElementById('productForm');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('foto');
+        const imagePreview = document.getElementById('imagePreview');
+        const productsList = document.getElementById('productsList');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+
+        // Upload de imagem
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+
+        function handleFileUpload(file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Arquivo muito grande! Máximo 5MB.');
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, selecione apenas imagens.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview" class="preview-image">
+                    <button type="button" class="btn btn-danger" onclick="removeImage()">Remover</button>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            imagePreview.innerHTML = '';
+            fileInput.value = '';
+        }
+
+        // Submissão do formulário
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const product = {
+                id: editingId || Date.now(),
+                nome: formData.get('nome'),
+                marca: formData.get('marca'),
+                categoria: formData.get('categoria'),
+                preco: parseFloat(formData.get('preco')),
+                descricao: formData.get('descricao'),
+                estoque: parseInt(formData.get('estoque')) || 0,
+                foto: imagePreview.querySelector('img')?.src || null,
+                dataCreated: editingId ? products.find(p => p.id === editingId).dataCreated : new Date().toLocaleDateString('pt-BR')
+            };
+
+            if (editingId) {
+                const index = products.findIndex(p => p.id === editingId);
+                products[index] = product;
+                editingId = null;
+                submitBtn.textContent = 'Cadastrar Produto';
+            } else {
+                products.push(product);
+            }
+
+            form.reset();
+            imagePreview.innerHTML = '';
+            renderProducts();
+        });
+
+        // Cancelar edição
+        cancelBtn.addEventListener('click', () => {
+            form.reset();
+            imagePreview.innerHTML = '';
+            editingId = null;
+            submitBtn.textContent = 'Cadastrar Produto';
+        });
+
+        // Renderizar produtos
+        function renderProducts() {
+            if (products.length === 0) {
+                productsList.innerHTML = '<div class="no-products">Nenhum produto cadastrado ainda. Comece adicionando seu primeiro produto!</div>';
+                return;
+            }
+
+            productsList.innerHTML = products.map(product => `
+                <div class="product-card">
+                    ${product.foto ? `<img src="${product.foto}" alt="${product.nome}" class="product-image">` : '<div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999;">Sem imagem</div>'}
+                    <div class="product-info">
+                        <h3>${product.nome}</h3>
+                        <p><strong>Marca:</strong> ${product.marca}</p>
+                        <p><strong>Categoria:</strong> ${product.categoria}</p>
+                        <div class="product-price">R$ ${product.preco.toFixed(2)}</div>
+                        <p><strong>Estoque:</strong> ${product.estoque} unidades</p>
+                        ${product.descricao ? `<p><strong>Descrição:</strong> ${product.descricao}</p>` : ''}
+                        <p style="font-size: 12px; color: #999;">Cadastrado em: ${product.dataCreated}</p>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="editProduct(${product.id})" style="padding: 8px 15px; font-size: 12px;">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteProduct(${product.id})">Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Editar produto
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('nome').value = product.nome;
+            document.getElementById('marca').value = product.marca;
+            document.getElementById('categoria').value = product.categoria;
+            document.getElementById('preco').value = product.preco;
+            document.getElementById('descricao').value = product.descricao;
+            document.getElementById('estoque').value = product.estoque;
+
+            if (product.foto) {
+                imagePreview.innerHTML = `
+                    <img src="${product.foto}" alt="Preview" class="preview-image">
+                    <button type="button" class="btn btn-danger" onclick="removeImage()">Remover</button>
+                `;
+            }
+
+            editingId = id;
+            submitBtn.textContent = 'Atualizar Produto';
+        }
+
+        // Excluir produto
+        function deleteProduct(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                products = products.filter(p => p.id !== id);
+                renderProducts();
+            }
+        }
+
+        // Inicialização
+        renderProducts();
+    </script>
+</body>
+</html>
